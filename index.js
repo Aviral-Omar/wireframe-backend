@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 import userRoutes from "./routes/users.js";
+import streamRoutes from "./routes/streams.js";
 
 const MONGODB_URI =
   "mongodb+srv://NoSQLB:LR5qFD9uhGRfYj4O@cluster0.uslcv.mongodb.net/wireframe?retryWrites=true&w=majority";
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 });
 
 app.use(userRoutes);
+app.use(streamRoutes);
 
 mongoose
   .connect(MONGODB_URI, {
