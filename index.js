@@ -26,6 +26,11 @@ app.use((req, res, next) => {
 app.use(userRoutes);
 app.use(streamRoutes);
 
+let port = process.env.PORT;
+if (port == null || port === "") {
+  port = 8080;
+}
+
 mongoose
   .connect(MONGODB_URI, {
     useNewUrlParser: true,
@@ -33,9 +38,5 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => {
-    let port = process.env.PORT;
-    if (port == null || port === "") {
-      port = 8080;
-    }
     app.listen(port);
   });

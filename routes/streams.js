@@ -1,9 +1,9 @@
 import express from "express";
 
-import { getStreams } from "../controllers/streams.js";
+import { getStreams, getStreamTable } from "../controllers/streams.js";
 
 const router = express.Router();
 
-router.get("/streams", getStreams);
+router.get("/streams", getStreams, getStreamTable);
 
 export default router;
