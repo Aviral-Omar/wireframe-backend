@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const metricSchema = new Schema({
+  _id: String,
   _index: String,
   _type: String,
   _score: Number,
@@ -13,7 +14,7 @@ const metricSchema = new Schema({
     metric_unique_key: String,
     created_at: String,
     priority: Number,
-    dimensions: [{ name: String, value: Number }],
+    dimensions: [{ name: String, value: String }],
     frequency: Number,
     status: String,
   },
