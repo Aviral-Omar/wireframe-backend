@@ -4,16 +4,20 @@ import StreamsPool from "../util/streams_pool.js";
 import Stream from "../models/stream.js";
 
 export const getStreams = async (req, res, next) => {
-  let token = req.get("Authorization").split(" ")[1];
   try {
+    let token = req.get("Authorization").split(" ")[1];
     jwt.verify(token, process.env.SECRET_KEY);
+  } catch {
+    return res.status(401).end();
+  }
+  try {
     if (Object.keys(req.query).length !== 0) {
       return next();
     }
     const streams = await Stream.find();
     res.status(200).json(streams);
   } catch {
-    res.status(401).end();
+    res.status(502).end();
   }
 };
 

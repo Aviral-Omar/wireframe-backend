@@ -12,19 +12,23 @@ export const postAddUser = async (req, res) => {
     } else {
       res.status(409).end();
     }
-  } catch (err) {
-    console.log(err);
+  } catch {
+    res.status(502).end();
   }
 };
 
 export const getToken = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email, password });
-  if (!user) {
-    res.status(404).end();
-  } else {
-    const token = jwt.sign(req.body, process.env.SECRET_KEY);
-    res.status(200).send(`Bearer ${token}`);
+  try {
+    const user = await User.findOne({ email, password });
+    if (!user) {
+      res.status(404).end();
+    } else {
+      const token = jwt.sign(req.body, process.env.SECRET_KEY);
+      res.status(200).send(`Bearer ${token}`);
+    }
+  } catch {
+    res.status(502).end();
   }
 };
 
@@ -32,10 +36,13 @@ export const getName = async (req, res) => {
   let token = req.get("Authorization").split(" ")[1];
   try {
     const { email, password } = jwt.verify(token, process.env.SECRET_KEY);
-    const { name } = await User.findOne({ email, password });
-    res.status(200).send(name);
-  } catch (err) {
-    console.log(err);
+    try {
+      const { name } = await User.findOne({ email, password });
+      res.status(200).send(name);
+    } catch {
+      res.status(502).end();
+    }
+  } catch {
     res.status(401).end();
   }
 };
