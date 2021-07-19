@@ -46,3 +46,13 @@ export const getName = async (req, res) => {
     res.status(401).end();
   }
 };
+
+export const authenticate = (req, res, next) => {
+  try {
+    let token = req.get("Authorization").split(" ")[1];
+    jwt.verify(token, process.env.SECRET_KEY);
+    next();
+  } catch {
+    return res.status(401).end();
+  }
+};

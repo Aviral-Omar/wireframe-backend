@@ -1,13 +1,6 @@
-import jwt from "jsonwebtoken";
 import StreamsPool from "../util/streams_pool.js";
 
 export const autoComplete = async (req, res) => {
-  try {
-    let token = req.get("Authorization").split(" ")[1];
-    jwt.verify(token, process.env.SECRET_KEY);
-  } catch {
-    return res.status(401).end();
-  }
   const { name, text, limit, id } = req.body;
   const query = `SELECT DISTINCT ${name} FROM public.stream_table_${id} WHERE UPPER(${name}) LIKE UPPER('%${text}%') LIMIT ${limit}`;
   try {

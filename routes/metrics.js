@@ -1,17 +1,15 @@
 import express from "express";
 
 import {
-  getMetrics,
-  getTSData,
-  getMetricsCount,
+  postMetrics,
+  postTSData,
+  postMetricsCount,
 } from "../controllers/metrics.js";
 
 const router = express.Router();
 
-router.get("/metrics/count", getMetricsCount);
+router.post("/metrics/count", postMetricsCount);
 
-router.get("/metrics", getMetrics);
-
-router.post("/metrics", getTSData);
+router.post("/metrics", postMetrics, postTSData);
 
 export default router;
