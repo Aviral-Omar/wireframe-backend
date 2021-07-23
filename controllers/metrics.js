@@ -4,15 +4,16 @@ import Metric from "../models/metric.js";
 
 export const postMetricsCount = async (req, res) => {
   const filters = req.body;
-  const query = Object.entries(filters).flatMap((entry) =>
-    entry[1].length
-      ? [
-          {
-            $elemMatch: { name: entry[0], value: { $in: entry[1] } },
-          },
-        ]
-      : []
-  );
+  const query = [];
+  Object.entries(filters).forEach((entry) => {
+    Object.entries(entry[1]).forEach((dim) => {
+      if (dim[1].length) {
+        query.push({
+          $elemMatch: { name: dim[0], value: { $in: dim[1] } },
+        });
+      }
+    });
+  });
 
   try {
     const metricsCount = await Metric.countDocuments(
@@ -38,15 +39,17 @@ export const postMetrics = async (req, res, next) => {
   const page = +req.query.page;
   const pageSize = +req.query.page_size;
   const filters = req.body;
-  const query = Object.entries(filters).flatMap((entry) =>
-    entry[1].length
-      ? [
-          {
-            $elemMatch: { name: entry[0], value: { $in: entry[1] } },
-          },
-        ]
-      : []
-  );
+
+  const query = [];
+  Object.entries(filters).forEach((entry) => {
+    Object.entries(entry[1]).forEach((dim) => {
+      if (dim[1].length) {
+        query.push({
+          $elemMatch: { name: dim[0], value: { $in: dim[1] } },
+        });
+      }
+    });
+  });
   try {
     const metrics = await Metric.find(
       query.length
