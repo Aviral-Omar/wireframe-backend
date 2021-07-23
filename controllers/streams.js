@@ -1,5 +1,4 @@
 import StreamsPool from "../util/streams_pool.js";
-import mongoose from "mongoose";
 
 import Stream from "../models/stream.js";
 
@@ -21,18 +20,6 @@ export const getStreamTable = async (req, res) => {
   try {
     const streamTable = await StreamsPool.query(query);
     res.status(200).json(streamTable);
-  } catch {
-    res.status(502).end();
-  }
-};
-
-export const postStreamById = async (req, res) => {
-  const { id } = req.body;
-  try {
-    const stream = await Stream.findOne({
-      "source._id": mongoose.Types.ObjectId(id),
-    });
-    res.status(200).json(stream);
   } catch {
     res.status(502).end();
   }
